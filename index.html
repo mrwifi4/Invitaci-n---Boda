@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitación de Boda</title>
+
+<style>
+body{
+    margin:0;
+    font-family: Georgia, serif;
+    background: linear-gradient(135deg,#fceabb,#f8b500);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    text-align:center;
+}
+
+.contenido{
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    width:90%;
+    max-width:500px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+button{
+    background:#b8860b;
+    color:white;
+    border:none;
+    padding:12px 25px;
+    border-radius:25px;
+    cursor:pointer;
+    font-size:16px;
+    margin-top:20px;
+}
+
+button:hover{
+    background:#a57400;
+}
+
+progress{
+    width:100%;
+    height:10px;
+    margin-top:20px;
+}
+
+.tiempo{
+    font-size:14px;
+    margin-top:5px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="contenido">
+    <h1>¡Nos Casamos!</h1>
+    <p>Te invitamos a celebrar nuestro matrimonio.</p>
+    <p><strong>Fecha:</strong> 20 Junio 2026</p>
+    <p><strong>Lugar:</strong> Salón Jardines</p>
+    <p><strong>Hora:</strong> 6:00 PM</p>
+
+    <button id="btnAudio" onclick="toggleAudio()">
+        ▶ Reproducir Música
+    </button>
+
+    <progress id="barra" value="0" max="100"></progress>
+
+    <div class="tiempo">
+        <span id="actual">0:00</span> /
+        <span id="duracion">0:00</span>
+    </div>
+</div>
+
+<audio id="audio" loop>
+    <source src="in the pool.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const audio = document.getElementById("audio");
+const btn = document.getElementById("btnAudio");
+const barra = document.getElementById("barra");
+const actual = document.getElementById("actual");
+const duracion = document.getElementById("duracion");
+
+function toggleAudio(){
+    if(audio.paused){
+        audio.play();
+        btn.textContent = "⏸ Pausar Música";
+    } else {
+        audio.pause();
+        btn.textContent = "▶ Reproducir Música";
+    }
+}
+
+audio.addEventListener("loadedmetadata", function(){
+    duracion.textContent = formatoTiempo(audio.duration);
+});
+
+audio.addEventListener("timeupdate", function(){
+    const porcentaje = (audio.currentTime / audio.duration) * 100;
+    barra.value = porcentaje;
+    actual.textContent = formatoTiempo(audio.currentTime);
+});
+
+function formatoTiempo(segundos){
+    const min = Math.floor(segundos / 60);
+    const sec = Math.floor(segundos % 60);
+    return min + ":" + (sec < 10 ? "0" + sec : sec);
+}
+</script>
+
+</body>
+</html>
